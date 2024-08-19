@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="vulnApp">
+<head>
+  <meta charset="UTF-8">
+  <title>AngularJS Vulnerability Test</title>
+  <script src="node_modules/angular/angular.js"></script>
+</head>
+<body ng-controller="MainController">
+  <div>
+    <input type="text" ng-model="inputData">
+    <button ng-click="processData()">Submit</button>
+  </div>
+  <div>
+    <p>Output: <span ng-bind-html="trustedOutput"></span></p>
+  </div>
+
+  <script>
+    var app = angular.module('vulnApp', ['ngSanitize']); // Include ngSanitize for ng-bind-html
+
+    app.controller('MainController', function($scope, $sce) {
+      $scope.processData = function() {
+        var unsafeExpression = $scope.inputData;
+        $scope.trustedOutput = $sce.trustAsHtml(unsafeExpression); // Trust input as HTML
+      };
+    });
+  </script>
+</body>
+</html>
